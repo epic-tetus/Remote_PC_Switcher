@@ -8,12 +8,15 @@
         "interface/ftdi/esp32_devkitj_v1.cfg",
         "target/esp32.cfg"
     ],
-    "idf.portWin": "COM1",
+    "idf.portWin": "COM3",
     "idf.pythonBinPathWin": "C:\\Users\\521ab\\.espressif\\python_env\\idf4.4_py3.8_env\\Scripts\\python.exe",
     "idf.toolsPathWin": "C:\\Users\\521ab\\.espressif",
     "files.associations": {
         "esp_system.h": "c",
         "param.h": "c",
-        "freertos.h": "c"
-    }
+        "freertos.h": "c",
+        "complex": "c",
+        "*.inc": "c"
+    },
+    "idf.flashType": "UART"
 }

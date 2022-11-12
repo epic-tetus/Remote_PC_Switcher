@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <sys/param.h>
 
 #include "freertos/FreeRTOS.h"
@@ -42,11 +43,11 @@ EventGroupHandle_t wifi_event_group;
 
 static const char * TAG = "REMOTE_PC_SW";
 
-bool pin_state = false;
+int pin_state = -1;
 
 int sock;
 uint32_t retry_count = 0;
-char * packet = "TEST_PACKET";
+char * packet = "ESP32_CONNECTED";
 
 // GPIO PART
 void configure_pin(void)
@@ -64,8 +65,19 @@ void pc_sw_control(int state)
 void gpio_task(void *pvParameters)
 {
     while (1) {
-        gpio_set_level(PC_SW_PIN, pin_state);
-		pin_state = !pin_state;
+		if (pin_state > -1) {
+			pc_sw_control(pin_state);
+            pin_state--;
+            
+            if(pin_state < 0){
+                const char * switch_response = "PC_POWER_ON...PLEASE_WAIT_FOR_DISPLAY_ON";
+                int err = send(sock, switch_response, strlen(switch_response), 0);
+                if (err < 0) {
+                    ESP_LOGE(TAG, "Error occurred during sending: errno %d", errno);
+                    break;
+                }
+            }
+		}
         vTaskDelay(GPIO_THREAD_PERIOD / portTICK_PERIOD_MS);
     }
 }
@@ -207,6 +219,15 @@ void tcp_client_task(void * pvParameters)
 				rx_buffer[len] = 0;
 				ESP_LOGI(TAG, "Received %d bytes from %s:", len, host_ip);
 				ESP_LOGI(TAG, "%s", rx_buffer);
+				if(strstr((char *)rx_buffer, "PC_SW_ON") != NULL) {
+                    pin_state = 1;
+                    static const char *response_ = "PC_SW_ON_RECEIVED!!";
+                    int err = send(sock, response_, strlen(response_), 0);
+                    if (err < 0) {
+                        ESP_LOGE(TAG, "Error occurred during sending: errno %d", errno);
+                        break;
+                    }
+                }
 			}
 			vTaskDelay(2000 / portTICK_PERIOD_MS);
 		}
