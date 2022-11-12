@@ -1,47 +1,57 @@
 #include <stdio.h>
-#include <curl/curl.h>
+#include <errno.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
-int main(int argc, char *argv)
+#include <winsock2.h>
+
+#define PACKET_SIZE 4096
+#define RESPONSE_SIZE 4096
+
+typedef struct sockaddr_in SOCK_ADDR;
+
+int main(int argc, char *argv[])
 {
-	CURL *curl;
-	CURLcode res;
+    int s = -1;
+	int code = 0;
 
-	struct sockaddr_in server_addr;
-	curl_socket_t sockfd;
+    WSADATA wsa;
+	SOCK_ADDR server;
+	
+	char message[PACKET_SIZE] = {0};
+	char response[RESPONSE_SIZE] = {0};
+    
+	int recv_size = 0;
 
-	curl = curl_easy_init();
-	if (curl)
-	{
-		curl_easy_setopt(curl, CURLOPT_URL, "http://127.0.0.1:1234");
+	memset(&server, 0, sizeof(server));
+    server.sin_addr.s_addr = inet_addr("127.0.0.1");
+    server.sin_family = AF_INET;
+    server.sin_port = htons(1234);
+    
+    if ((code = WSAStartup(MAKEWORD(2,2), &wsa)) != 0) {
+        exit(code);
+    }
+    
+    if((s = socket(AF_INET, SOCK_STREAM, 0)) < 0)    {
+        exit(s);
+    }
 
-		sockfd = socket(AF_INET, SOCK_STREAM, 0);
-		if (sockfd == CURL_SOCKET_BAD)
-		{
-			printf("Error creating listening socket.\n");
-			return 3;
-		}
+    if (connect(s, (struct sockaddr *)(&server), sizeof(server)) < 0) {
+        exit(s);
+    }
+    
+	sprintf(message, "[PC]PC_IS_ON");
+    if(send(s, message, strlen(message), 0) < 0) {
+        exit(s);
+    }
+    
+    if((recv_size = recv(s, response, RESPONSE_SIZE, 0)) < 0) {
+        exit(s);
+    }
 
-		memset(&servaddr, 0, sizeof(servaddr));
-		servaddr.sin_family = AF_INET;
-		servaddr.sin_port = htons(PORTNUM);
+    printf("%s\n", response);
 
-		servaddr.sin_addr.s_addr = inet_addr(IPADDR);
-		if (INADDR_NONE == servaddr.sin_addr.s_addr)
-		{
-			close(sockfd);
-			return 2;
-		}
-
-		if (connect(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr)) ==
-			-1)
-		{
-			close(sockfd);
-			printf("client error: connect: %s\n", strerror(errno));
-			return 1;
-		}
-		curl_easy_cleanup(curl);
-		close(sockfd);
-	}
-
-	return 0;
+    closesocket(s);
+    WSACleanup();
 }
