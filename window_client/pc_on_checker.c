@@ -40,15 +40,11 @@ int main(int argc, char *argv[])
     if (connect(s, (struct sockaddr *)(&server), sizeof(server)) < 0) {
         exit(s);
     }
-    
-	sprintf(message, key);
-	if(send(s, message, strlen(message), 0) < 0) {
-        exit(s);
-    }
 
 	sprintf(message, "[PC]CLIENT_IS_ON");
     if(send(s, message, strlen(message), 0) < 0) {
-        exit(s);
+        printf("send failed\n");
+		exit(s);
     }
 
     printf("send success\n");
