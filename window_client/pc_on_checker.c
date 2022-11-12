@@ -25,9 +25,9 @@ int main(int argc, char *argv[])
 	int recv_size = 0;
 
 	memset(&server, 0, sizeof(server));
-    server.sin_addr.s_addr = inet_addr("127.0.0.1");
+    server.sin_addr.s_addr = inet_addr("54.180.0.192");
     server.sin_family = AF_INET;
-    server.sin_port = htons(1234);
+    server.sin_port = htons(1129);
     
     if ((code = WSAStartup(MAKEWORD(2,2), &wsa)) != 0) {
         exit(code);
@@ -41,16 +41,21 @@ int main(int argc, char *argv[])
         exit(s);
     }
     
-	sprintf(message, "[PC]PC_IS_ON");
-    if(send(s, message, strlen(message), 0) < 0) {
-        exit(s);
-    }
-    
-    if((recv_size = recv(s, response, RESPONSE_SIZE, 0)) < 0) {
+	sprintf(message, key);
+	if(send(s, message, strlen(message), 0) < 0) {
         exit(s);
     }
 
-    printf("%s\n", response);
+	sprintf(message, "[PC]CLIENT_IS_ON");
+    if(send(s, message, strlen(message), 0) < 0) {
+        exit(s);
+    }
+
+    printf("send success\n");
+    // if((recv_size = recv(s, response, RESPONSE_SIZE, 0)) < 0) {
+    //     exit(s);
+    // }
+    // printf("%s\n", response);
 
     closesocket(s);
     WSACleanup();
