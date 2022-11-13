@@ -35,6 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool socket_state = false;
   bool pc_state = false;
   var response = "";
+  var remote_pc_state = "";
 
   TextEditingController controller = TextEditingController();
 
@@ -57,6 +58,9 @@ class _MyHomePageState extends State<MyHomePage> {
           print(String.fromCharCodes(onData).trim());
           setState(() {
             response = (String.fromCharCodes(onData).trim());
+            if (response.indexOf("STATE_") == 0) {
+              remote_pc_state = response.substring("STATE_".length);
+            }
           });
         });
       },
@@ -133,6 +137,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               },
             ),
+            ElevatedButton(
+              onPressed: () {
+                send("GET_PC_STATE");
+              },
+              child: Text("PC STATE"),
+            ),
+            Text(remote_pc_state)
           ],
         ),
       ),
