@@ -7,6 +7,7 @@ import (
 	"net"
 )
 
+var PC_STATE = false
 var client_list []net.Conn
 
 func main() {
@@ -51,13 +52,33 @@ func ConnHandler(conn net.Conn) {
 				return
 			}
 
-			for _, c := range client_list {
-				log.Println(c.RemoteAddr())
-				if c != conn {
-					// advertiser
-					_, err = c.Write(data[:n])
+			if string(data) == "GET_PC_STATE" {
+				if PC_STATE {
+					_, err = conn.Write([]byte("STATE_ON"))
 					if err != nil {
 						log.Println(err)
+						return
+					}
+				} else {
+					_, err = conn.Write([]byte("STATE_OFF"))
+					if err != nil {
+						log.Println(err)
+						return
+					}
+				}
+			} else if string(data) == "SET_PC_STATE_ON" {
+				PC_STATE = true
+			} else if string(data) == "SET_PC_STATE_OFF" {
+				PC_STATE = false
+			} else {
+				for _, c := range client_list {
+					log.Println(c.RemoteAddr())
+					if c != conn {
+						// advertiser
+						_, err = c.Write(data[:n])
+						if err != nil {
+							log.Println(err)
+						}
 					}
 				}
 			}
