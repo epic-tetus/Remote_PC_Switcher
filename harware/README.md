@@ -7,3 +7,6 @@
 * Board: ESP32-DevKitC
 * Transistor: 2N2222
 * Diode: UF4007 [Not essential, But remcommand]
+
+## Helpful Reference
+https://www.instructables.com/arduino-controlled-pc-power-switch
