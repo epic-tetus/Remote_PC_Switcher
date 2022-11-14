@@ -46,6 +46,12 @@ int main(int argc, char *argv[])
         printf("send failed\n");
 		exit(s);
     }
+	
+	sprintf(message, "SET_PC_STATE_ON");
+    if(send(s, message, strlen(message), 0) < 0) {
+        printf("send failed\n");
+		exit(s);
+    }
 
     printf("send success\n");
     // if((recv_size = recv(s, response, RESPONSE_SIZE, 0)) < 0) {
