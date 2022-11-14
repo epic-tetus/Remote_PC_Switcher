@@ -1,3 +1,5 @@
 ./firmware/build/
+./firmware/build
+./firmware/build/*
 ./firmware/.vscode
 .vscode
