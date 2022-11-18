@@ -10,3 +10,9 @@ need to copy pc_on_checker.exe file in C:\Users\[User Name]\AppData\Roaming\Micr
 2. Computer Configuration => Windows Settings => Scripts (Startup / Shutdown) => Shutdown => Properties => Add
 3. paste location of pc_off_noti.exe in Script Name
 4. apply Scripts
+
+## Build Command
+### Windows
+```gcc -o pc_on_noti .\pc_on_noti.c -lws2_32 ```
+
+```gcc -o pc_off_noti .\pc_off_noti.c -lws2_32 ```
