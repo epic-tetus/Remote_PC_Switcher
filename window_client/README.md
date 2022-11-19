@@ -16,3 +16,8 @@ need to copy pc_on_checker.exe file in C:\Users\[User Name]\AppData\Roaming\Micr
 ```gcc -o pc_on_noti .\pc_on_noti.c -lws2_32 ```
 
 ```gcc -o pc_off_noti .\pc_off_noti.c -lws2_32 ```
+
+### Linux
+```gcc -o pc_on_noti .\pc_on_noti.c ```
+
+```gcc -o pc_off_noti .\pc_off_noti.c ```
