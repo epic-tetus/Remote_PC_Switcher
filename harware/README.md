@@ -1,7 +1,7 @@
 # Hardware
 
 ## Breadboard Layout
-![](https://github.com/epic-tetus/Remote_PC_Switcher/blob/main/harware/Breadboard_View.PNG)
+![](https://github.com/epic-tetus/Remote_PC_Switcher/blob/main/harware/Image/Breadboard_View.PNG)
 
 ## Parts
 * Board: ESP32-DevKitC
@@ -55,13 +55,13 @@ PC Case SW        │        │
 __~Sorry for my dusty motherboard~__
 
 ### 5V & GND
-![Connection of ATX_PWR 5V Pin](https://github.com/epic-tetus/Remote_PC_Switcher/blob/main/harware/ATX_PWR_PIN.jpg)
+![Connection of ATX_PWR 5V Pin](https://github.com/epic-tetus/Remote_PC_Switcher/blob/main/harware/Image/ATX_PWR_PIN.jpg)
 
 * __You need to confirm that pin is real 5V pin output using your multimeter.__ For saving your ESP32.
 * I don't wanna change my power connector which already connected. So, I inserted a jumper cable into connector like the picture above.
 
 ### Power Switch Pins
-![Branching Method of Power SW Pins](https://github.com/epic-tetus/Remote_PC_Switcher/blob/main/harware/JFP1_PIN.jpg)
+![Branching Method of Power SW Pins](https://github.com/epic-tetus/Remote_PC_Switcher/blob/main/harware/Image/JFP1_PIN.jpg)
 
 * Normally, Computer case's power sw cable need to connect with Motherboard's JFP1 [6|8].
 * However, I diverged two cables, SW + & SW - , and connected them to the transistor.
